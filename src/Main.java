@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -21,18 +23,14 @@ class Node {
 
 }
 
+
 public class Main {
 	
-	public  Stack<Node> tree = new Stack<Node>();
+	public Stack<Node> tree = new Stack<Node>();
 	public HashMap<String, ArrayList<String>> cliques;
 	public HashMap<String, ArrayList<String>> sharedV= (HashMap<String, ArrayList<String>>) sharedValue().get(0);
-	public HashMap<String, ArrayList<String>> fc= forbiddenConfig();
+	public ArrayList<ArrayList<String>> fc ;//= forbiddenConfig();
 	public ArrayList<String> keys = (ArrayList<String>) sharedValue().get(1);
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	//new HashMap<String, ArrayList<String>>();
 	@SuppressWarnings("unchecked")
@@ -47,18 +45,19 @@ public class Main {
 					
 				
 					Node node = tree.pop();
-					step3(node);//step 3 and 4 are combined
+					step3(node);//step 3 and 4 and 5 are combined
 					//nodes are created inside step 3
 				}else {
 					//print the cliques partitions p1,p2,..
+					System.out.println(tree.peek().cN.toString());
 				}
 				
 			}
 	
 	}
 
-	private boolean step2(Node node) { // false if empty
-		if(node.svN.isEmpty()) {
+	private  boolean step2(Node node) { // false if empty
+		if(node.keysN.isEmpty()) {
 			return false;
 		}
 		return true;
@@ -81,16 +80,19 @@ public class Main {
 			keys.remove(0);
 			Node tempN = new Node(cn,svn,keys);
 			step4(tempN);
-			if(step5()) {
+			if(!step5(tempN)) {
 				tree.push(tempN);
 			}
 			else {
+				System.out.println("Step 5 : Failed");
 				break;
 			}
 		}
 	}
 	
 	
+
+
 	private void step4(Node node) {
 		HashMap<String, ArrayList<String>> svn = node.svN;
 		HashMap<String, ArrayList<String>> cn = node.cN;
@@ -114,6 +116,57 @@ public class Main {
 
 	}
 	
+	
+	private boolean step5(Node node) { // returns true means fail 
+		
+		HashMap<String, ArrayList<String>> cn = node.cN;
+		String[]cnkeys = (String[]) cn.keySet().toArray();
+		
+		//checking for forbidden config
+		
+		for(int i = 0; i<cn.keySet().size(); i++) {
+			for(int j = 0 ; j<fc.size() ; j++) {
+				if(fc.get(j).containsAll(cn.get(cnkeys[i]))) {
+					return true;
+				}
+			}
+		}
+		
+		
+		// checking for unions
+		for(int i = 0 ; i < cn.keySet().size() ; i++) {
+			for(int  j=i+1 ; j< cn.keySet().size(); j++) {
+				Set<String> set = new HashSet<String>();
+				set.addAll(cn.get(cnkeys[i]));
+				set.addAll(cn.get(cnkeys[j]));
+				if(checksetunions(set,cliques)) {
+					return true;
+				}
+			}
+		}
+		
+		
+		
+		return false;
+
+	}
+	
+	private boolean isforbidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean checksetunions(Set<String> set, HashMap<String, ArrayList<String>> c) { // returns true if contains union
+		// TODO Auto-generated method stub
+		String[]ckeys = (String[]) c.keySet().toArray();
+		for(int i = 0; i< c.keySet().size();i++) {
+			if(c.get(ckeys[i]).containsAll(set)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private String checksubset(HashMap<String, ArrayList<String>> cn) {
 		// TODO Auto-generated method stub
 		String[]cnkeys = (String[]) cn.keySet().toArray();
