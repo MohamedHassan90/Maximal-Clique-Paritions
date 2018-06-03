@@ -5,24 +5,27 @@ import java.util.Stack;
 /**
  * This is our Main class, where the main method exists.  
  */
-class node {
+class Node {
 	
 	
 	HashMap<String, ArrayList<String>> cN;
 	ArrayList<String> svN;
 	
 	
-	public node (HashMap<String, ArrayList<String>> c , ArrayList<String> s ) {
+	public Node (HashMap<String, ArrayList<String>> c , ArrayList<String> s ) {
 		this.svN = s;
-		this.cliques = c ;
+		this.cN = c ;
 	}
 
 }
 
 public class Main {
 	
-	public  Stack<node> tree = new Stack<node>();
-	
+	public  Stack<Node> tree = new Stack<Node>();
+	public HashMap<String, ArrayList<String>> cliques;
+	public HashMap<String, ArrayList<String>> sharedV= (HashMap<String, ArrayList<String>>) sharedValue().get(0);
+	public HashMap<String, ArrayList<String>> fc= forbiddenConfig();
+	public ArrayList<String> keys = (ArrayList<String>) sharedValue().get(1);
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -32,29 +35,71 @@ public class Main {
 	//new HashMap<String, ArrayList<String>>();
 	@SuppressWarnings("unchecked")
 	public void Maximal () {
-		HashMap<String, ArrayList<String>> cliques;
-		HashMap<String, ArrayList<String>> sharedV= (HashMap<String, ArrayList<String>>) sharedValue().get(0);
-		HashMap<String, ArrayList<String>> fc= forbiddenConfig();
-		ArrayList<String> keys = (ArrayList<String>) sharedValue().get(1);
+	
+		//define the root node
+		// add it to the tree
 		
+			while (!tree.isEmpty()) {
 				
-		keys.add("");
-		//step 2
-		if(!isSharedVempty(sharedV)) { 
-			
-			//step3
-			
-			for(int i = 0 ; i< sharedV.get(keys.get(0)).size() ;i++) {
+				if(step2(tree.peek())) {
+					
+					//node now 
+					//svn,cn
+					step3(tree.pop());//svn , cn
+					step4(); //svn,cn
+					//create nodes
+				}else {
+					//print the cliques partitions p1,p2,..
+				}
 				
-				tree.push(new Node());
-
 			}
-			
-		}
 	
 	}
 
+	private boolean step2(Node node) { // false if empty
+		if(node.svN.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
 
+	private void step3(Node node) {
+		
+		ArrayList<String> svn = node.svN;
+		HashMap<String, ArrayList<String>> cn = node.cN;
+		
+		ArrayList<String> common= sharedV.get(svn.get(0));
+		
+		for(int i = 0; i<common.size(); i++) {
+			
+			for(int j = 0; j<common.size();j++) {  // remove part
+				cn.get(common.get(j)).remove(svn.get(0));
+			}
+			cn.get(common.get(i)).add(svn.get(0)); // add 2 to Ci
+			svn.remove(0);
+			Node tempN = new Node(cn,svn);
+			tree.push(tempN);
+		}
+	}
+	
+	
+	private void step4(Node node) {
+		string c = checksubset(node.cN);
+		if(c!=null) {
+			for(int i = 0; i<node.svN.size();i++) {
+				if (sharedV.get(node.svN.get(i)).contains(c)) {
+					
+				}
+			}
+		}
+		
+		
+	}
+	
+	private String checksubset(HashMap<String, ArrayList<String>> cN) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	private boolean isSharedVempty(HashMap<String, ArrayList<String>> sv) {
 		// TODO Auto-generated method stub
