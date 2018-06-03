@@ -9,12 +9,14 @@ class Node {
 	
 	
 	HashMap<String, ArrayList<String>> cN;
-	ArrayList<String> svN;
+	HashMap<String, ArrayList<String>> svN;
+	ArrayList<String> keysN;
 	
 	
-	public Node (HashMap<String, ArrayList<String>> c , ArrayList<String> s ) {
+	public Node (HashMap<String, ArrayList<String>> c , HashMap<String, ArrayList<String>> s, ArrayList<String>k ) {
 		this.svN = s;
 		this.cN = c ;
+		this.keysN = k;
 	}
 
 }
@@ -43,11 +45,10 @@ public class Main {
 				
 				if(step2(tree.peek())) {
 					
-					//node now 
-					//svn,cn
-					step3(tree.pop());//svn , cn
-					step4(); //svn,cn
-					//create nodes
+				
+					Node node = tree.pop();
+					step3(node);//step 3 and 4 are combined
+					//nodes are created inside step 3
 				}else {
 					//print the cliques partitions p1,p2,..
 				}
@@ -63,42 +64,67 @@ public class Main {
 		return true;
 	}
 
-	private void step3(Node node) {
+	private void step3(Node node) { // the svn map is not updated !!! , all nodes will contain the original SharedV hashmap
 		
-		ArrayList<String> svn = node.svN;
+		HashMap<String, ArrayList<String>> svn = node.svN;
 		HashMap<String, ArrayList<String>> cn = node.cN;
+		ArrayList<String> keys= node.keysN;
 		
-		ArrayList<String> common= sharedV.get(svn.get(0));
+		ArrayList<String> common= sharedV.get(keys.get(0));
 		
 		for(int i = 0; i<common.size(); i++) {
 			
 			for(int j = 0; j<common.size();j++) {  // remove part
-				cn.get(common.get(j)).remove(svn.get(0));
+				cn.get(common.get(j)).remove(keys.get(0));
 			}
-			cn.get(common.get(i)).add(svn.get(0)); // add 2 to Ci
-			svn.remove(0);
-			Node tempN = new Node(cn,svn);
-			tree.push(tempN);
+			cn.get(common.get(i)).add(keys.get(0)); // add 2 to Ci
+			keys.remove(0);
+			Node tempN = new Node(cn,svn,keys);
+			step4(tempN);
+			if(step5()) {
+				tree.push(tempN);
+			}
+			else {
+				break;
+			}
 		}
 	}
 	
 	
 	private void step4(Node node) {
-		string c = checksubset(node.cN);
+		HashMap<String, ArrayList<String>> svn = node.svN;
+		HashMap<String, ArrayList<String>> cn = node.cN;
+		ArrayList<String> keys= node.keysN;
+		String c = checksubset(cn);
+		
 		if(c!=null) {
-			for(int i = 0; i<node.svN.size();i++) {
-				if (sharedV.get(node.svN.get(i)).contains(c)) {
-					
+			for(int i = 0; i<keys.size();i++) {
+				if (svn.get(keys.get(i)).contains(c)) {
+					svn.get(keys.get(i)).remove(c);
+					if(svn.get(keys.get(i)).size()<=1) {
+						svn.remove(keys.get(i));
+						keys.remove(i);
+					}
+				}
+			}
+			
+			cn.remove(c);
+			
+		}
+
+	}
+	
+	private String checksubset(HashMap<String, ArrayList<String>> cn) {
+		// TODO Auto-generated method stub
+		String[]cnkeys = (String[]) cn.keySet().toArray();
+		for(int i = 0 ; i< cnkeys.length ; i++) {
+			for(int j = cnkeys.length-1; j >i ; j--) {
+				if(cn.get(cnkeys[i]).containsAll(cn.get(cnkeys[j]))) {
+					return cnkeys[j];
 				}
 			}
 		}
-		
-		
-	}
-	
-	private String checksubset(HashMap<String, ArrayList<String>> cN) {
-		// TODO Auto-generated method stub
-		return null;
+		return null;	
 	}
 
 	private boolean isSharedVempty(HashMap<String, ArrayList<String>> sv) {
