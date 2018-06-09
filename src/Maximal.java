@@ -153,31 +153,58 @@ public class Maximal {
 	//	fc.add(new ArrayList<String>() {{add("c2");add("3");}});
 	//	fc.add(new ArrayList<String>() {{add("c1");add("2");add("3");}});
 	///*
-		Object[] ckeys = cliques.keySet().toArray();
-		for(int i = 0 ; i<cliques.size(); i++) {
-			String s = (String) ckeys[i];
-			fc.add(new ArrayList<String>() {{add(s);}});
-		}
-		for(int i = 0; i<sharedV.size(); i++) {
-				String c = sharedV.get(keys.get(i)).get(0); //c1
-				int index=-1;
-				for(int j = 0 ; j< fc.size(); j++) {
-					if(fc.get(j).get(0).equals(c)) {
-						index = j;
-					}
-				}
-				fc.get(index).add(keys.get(i));
+		for(int i = 0 ; i<keys.size(); i++) {
+			String s = keys.get(i);
+			fc.add(new ArrayList<String>() {{add(sharedV.get(s).get(0));add(s);}});
 		}
 		
+		
+		for(int i = 0 ; i < sharedV.size(); i++) {
+			for(int j = i+1 ; j< sharedV.size(); j++) {
+				if(sharedV.get(keys.get(i)).containsAll(sharedV.get(keys.get(j))) && sharedV.get(keys.get(j)).containsAll(sharedV.get(keys.get(i)))) {
+					
+					String s = sharedV.get(keys.get(i)).get(0); //c1
+					int ii = i;
+					int jj = j;
+					fc.add(new ArrayList<String>() {{add(s);add(keys.get(ii));add(keys.get(jj));}}); //c1 ; 2(i) ; 3(j)
+					
+				}
+			}
+				
+		}
+		
+	//	System.out.println("fc : "+ fc);
+
+
 		optimizefc();
+
 		//*/
 		System.out.println("fc : "+ fc);
 	}
 
 
 	private void optimizefc() {
-		// TODO Auto-generated method stub
-		Object[] ckeys = cliques.keySet().toArray();
+	
+		for( int i = 0 ; i< fc.size() ; i++) {
+			
+			String c = fc.get(i).get(0); //c1
+			
+		//	System.out.println("keys:"+keys + "cliq" +cliques.get(c));
+
+			if(!keys.containsAll(cliques.get(c))) {
+				fc.remove(i);
+				optimizefc();
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		/*	Object[] ckeys = cliques.keySet().toArray();
 		
 		for(int i = 0 ; i < cliques.size(); i++) {
 			if(!keys.containsAll(cliques.get(ckeys[i]))) {
@@ -191,6 +218,7 @@ public class Maximal {
 				fc.remove(index);
 			}
 		}
+	*/
 	}
 
 
@@ -331,7 +359,6 @@ public class Maximal {
 		for(int i = 0; i<cn.keySet().size(); i++) {
 			for(int j = 0 ; j<fc.size() ; j++) {
 				if(fc.get(j).containsAll(cn.get(cnkeys[i]))&&(fc.get(j).get(0).equals(cnkeys[i]))) {
-					System.out.println(cn.get(cnkeys[i]));
 					return true;
 				}
 			}
