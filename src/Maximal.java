@@ -35,8 +35,8 @@ public class Maximal {
 	public Stack<Node> tree = new Stack<Node>();
 	public HashMap<String, ArrayList<String>> cliques = new HashMap<String, ArrayList<String>>() ;
 	public HashMap<String, ArrayList<String>> sharedV= new  HashMap<String, ArrayList<String>> ();
-	public ArrayList<ArrayList<String>> fc = new ArrayList<ArrayList<String>>() ;//= forbiddenConfig();
-	public ArrayList<String> keys = new ArrayList<String>() ; //1,2,3
+	public ArrayList<ArrayList<String>> fc = new ArrayList<ArrayList<String>>() ;
+	public ArrayList<String> keys = new ArrayList<String>() ;
 	public int partition = 0; 
 	public int nodes = 0; 
 	boolean delete = false;
@@ -50,31 +50,23 @@ public class Maximal {
 	kbuild(); //Constructing the keys ArrayList
 	sVbuild(); //Constructing the SharedVertices
 	fcbuild(); //Constructing the fc
-
+	System.out.print(keys);
 	
 	Node root = new Node(cliques,sharedV,keys);
 	tree.push(root);
-	//System.out.println( "root :"+ root.cN);
 			while (!tree.isEmpty()) {
-			//	System.out.println( tree.peek().cN);
-
 				if(step2(tree.peek())) {
-					
-					
 					Node node = tree.pop();
-					step3(node);//step 3 and 4 and 5 are combined
-					//nodes are created inside step 3
+					step3(node);//step 3 and 4 and 5 are combined	//nodes are created inside step 3
 				}else {
 					if(delete) {
 						delete = false;
 					}else {
 						partition ++;
 						Map<String, ArrayList<String>> par = new TreeMap<>(tree.peek().cN);
-						System.out.println( "P"+partition+" : "+par);
+						System.out.println( "P"+partition+" : "+par); //printing partitions
 					}
 					tree.pop();
-				    //print the cliques partitions p1,p2,..
-				
 				}
 				
 			}
@@ -84,14 +76,10 @@ public class Maximal {
 	
 
 	private void kbuild() {
-		
-	//	keys.add("1");
-	//	keys.add("2");
-	//	keys.add("3");
+
 		ArrayList<String> a = new ArrayList<String>();
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		Set<String> k = new HashSet<String>();
-	//	String k =  sharedV.keySet();
 		Collection c = cliques.values();
 		Pattern p = Pattern.compile("\\d+");
 		Matcher m = p.matcher(c.toString());
@@ -113,20 +101,11 @@ public class Maximal {
 			}
 		}
 		keys.addAll(k);
-	//	System.out.println(k);
-	//	System.out.println(cliques.values());
-
-	//	keys.addAll(sharedV.keySet());
-		
 	}
 
 
 
 	private void sVbuild() {
-	//	sharedV.put("1",new ArrayList<String>() {{add("c1");add("c2");}});
-	//	sharedV.put("2",new ArrayList<String>() {{add("c1");add("c4");}});
-	//	sharedV.put("3",new ArrayList<String>() {{add("c2");add("c3");}});
-	
 		ArrayList<String>ckeys = new ArrayList<String>();
 		Map<String, ArrayList<String>> map = new TreeMap<>(cliques);
 		ckeys.addAll(map.keySet());
@@ -134,9 +113,9 @@ public class Maximal {
 			for(int j = 0; j<map.size(); j++) {
 				if(  map.get(ckeys.get(j)).contains(keys.get(i))) {
 					if(sharedV.containsKey(keys.get(i))) {
-						sharedV.get(keys.get(i)).add((String) ckeys.get(j));
+						sharedV.get(keys.get(i)).add(ckeys.get(j));
 					}else {
-						String s = (String) ckeys.get(j);
+						String s = ckeys.get(j);
 						sharedV.put(keys.get(i),new ArrayList<String>() {{add(s);}});
 					}
 				}
@@ -147,11 +126,6 @@ public class Maximal {
 
 
 	private void fcbuild() {
-	//	fc.add(new ArrayList<String>() {{add("c1");add("1");}});
-	//	fc.add(new ArrayList<String>() {{add("c1");add("2");}});
-	//	fc.add(new ArrayList<String>() {{add("c2");add("3");}});
-	//	fc.add(new ArrayList<String>() {{add("c1");add("2");add("3");}});
-	///*
 		for(int i = 0 ; i<keys.size(); i++) {
 			String s = keys.get(i);
 			fc.add(new ArrayList<String>() {{add(sharedV.get(s).get(0));add(s);}});
@@ -171,53 +145,21 @@ public class Maximal {
 			}
 				
 		}
-		
-	//	System.out.println("fc : "+ fc);
 
+		optimizefc(); //removing duplicated and nonshared vertices from fc
 
-		optimizefc();
-
-		//*/
-		System.out.println("fc : "+ fc);
 	}
 
 
 	private void optimizefc() {
 	
 		for( int i = 0 ; i< fc.size() ; i++) {
-			
-			String c = fc.get(i).get(0); //c1
-			
-		//	System.out.println("keys:"+keys + "cliq" +cliques.get(c));
-
+			String c = fc.get(i).get(0);
 			if(!keys.containsAll(cliques.get(c))) {
 				fc.remove(i);
 				optimizefc();
-			}
-			
+			}	
 		}
-		
-		
-		
-		
-		
-		
-		
-		/*	Object[] ckeys = cliques.keySet().toArray();
-		
-		for(int i = 0 ; i < cliques.size(); i++) {
-			if(!keys.containsAll(cliques.get(ckeys[i]))) {
-				String r = (String) ckeys[i]; //c1
-				int index=-1;
-				for(int j = 0 ; j< fc.size(); j++) {
-					if(fc.get(j).get(0).equals(r)) {
-						index = j;
-					}
-				}
-				fc.remove(index);
-			}
-		}
-	*/
 	}
 
 
@@ -248,7 +190,7 @@ public class Maximal {
 		return true;
 	}
 
-	private void step3(Node node) { // the svn map is not updated !!! , all nodes will contain the original SharedV hashmap
+	private void step3(Node node) { 
 		
 		
 		ArrayList<String> common= sharedV.get(node.keysN.get(0));
@@ -259,45 +201,31 @@ public class Maximal {
 			HashMap<String, ArrayList<String>> svn = copy(node.svN);
 			
 
-			for(int j = 0; j<common.size();j++) {  // remove part
+			for(int j = 0; j<common.size();j++) {  
 				if(cn.get(common.get(j))!= null) {
-				//	System.out.println(keys.get(0)+":"+common.get(j));
 					cn.get(common.get(j)).remove(keys.get(0));
-
 				}
 			}
 			
-//			System.out.println(common.get(i));
 			if(cn.get(common.get(i))!= null) {
-				cn.get(common.get(i)).add(keys.get(0)); // add 2 to Ci
+				cn.get(common.get(i)).add(keys.get(0)); 
 			}else {
 				delete = true;
-				cn.get(common.get(i+1)).add(keys.get(0)); // add 2 to Ci
+				cn.get(common.get(i+1)).add(keys.get(0)); 
 		
 			}
 			keys.remove(0);
 
 			Node tempN = new Node(cn,svn,keys);
-			//System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
 			step4(tempN);
-			//System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
 
 			if(!step5(tempN)) {
-			//	System.out.println( "keys : "+(i+1)+": "+ tempN.keysN);
-			//	System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
-
-					tree.push(tempN);
-				
+					tree.push(tempN);	
 			}
 			else {
-
-				//System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
-			//	System.out.println("Step 5 : Failed");
 				break;
 			}
 			nodes++;
-		//	System.out.println( "N"+nodes);
-
 		}
 	}
 	
@@ -307,7 +235,6 @@ public class Maximal {
 		    for (Entry<String, ArrayList<String>> entry : original.entrySet())
 		    {
 		        copy.put(entry.getKey(),
-		           // Or whatever List implementation you'd like here.
 		           new ArrayList<String>(entry.getValue()));
 		    }
 		    return copy;
@@ -336,15 +263,11 @@ public class Maximal {
 					if(svn.get(keys.get(i)).size()<=1) {
 						svn.remove(keys.get(i));
 						keys.remove(i);
-						
 					}
 				}
 			}
-			
 			cn.remove(c);
-			
 		}
-
 	}
 	
 	
@@ -363,7 +286,6 @@ public class Maximal {
 			}
 		}
 		
-		
 		// checking for unions
 		for(int i = 0 ; i < cn.keySet().size() ; i++) {
 			for(int  j=i+1 ; j< cn.keySet().size(); j++) {
@@ -375,17 +297,12 @@ public class Maximal {
 				}
 			}
 		}
-		
-		
-		
-		return false;
-
+			return false;
 	}
 	
 
 
 	private boolean checksetunions(Set<String> set, HashMap<String, ArrayList<String>> c) { // returns true if contains union
-		// TODO Auto-generated method stub
 		Object[]ckeys =  c.keySet().toArray();
 		for(int i = 0; i< c.keySet().size();i++) {
 			if(c.get(ckeys[i]).containsAll(set)) {
@@ -396,37 +313,19 @@ public class Maximal {
 	}
 
 	private String checksubset(HashMap<String, ArrayList<String>> cn) {
-		// TODO Auto-generated method stub
 		Object[]cnkeys =  cn.keySet().toArray();
 		for(int i = 0 ; i< cnkeys.length ; i++) {
 			for(int j = cnkeys.length-1; j >i ; j--) {
-		//	for(int j = 0; j <cnkeys.length ; j++) {
-			//	System.out.println("subset S: " + cn.get(cnkeys[j]));
-			//	System.out.println("subset L: " + cn.get(cnkeys[i]));
 				if(cn.get(cnkeys[i]).size()<cn.get(cnkeys[j]).size()) {
 					if(cn.get(cnkeys[j]).containsAll(cn.get(cnkeys[i]))) {
-					
-				//		System.out.println("trxxxxxxx");
-				//		System.out.println(cnkeys[i]);
-
-
 						return (String) cnkeys[i];
-
 					}
 				}
 				if(cn.get(cnkeys[i]).containsAll(cn.get(cnkeys[j]))) {
-					
-				//	System.out.println("treeeeeeeeeee");
-
 					return (String) cnkeys[j];
-
 				}
 			}
 		}
 		return null;	
 	}
-
-
-	
-
 }
