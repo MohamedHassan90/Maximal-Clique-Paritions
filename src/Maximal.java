@@ -47,9 +47,10 @@ public class Maximal {
 	public Maximal (String input) {
 	
 	cbuild(input);  //Constructing the Cliques	
-	fcbuild(); //Constructing the fc
 	kbuild(); //Constructing the keys ArrayList
 	sVbuild(); //Constructing the SharedVertices
+	fcbuild(); //Constructing the fc
+
 	
 	Node root = new Node(cliques,sharedV,keys);
 	tree.push(root);
@@ -59,7 +60,7 @@ public class Maximal {
 
 				if(step2(tree.peek())) {
 					
-
+					
 					Node node = tree.pop();
 					step3(node);//step 3 and 4 and 5 are combined
 					//nodes are created inside step 3
@@ -147,11 +148,52 @@ public class Maximal {
 
 
 	private void fcbuild() {
-		fc.add(new ArrayList<String>() {{add("c1");add("1");}});
-		fc.add(new ArrayList<String>() {{add("c1");add("2");}});
-		fc.add(new ArrayList<String>() {{add("c2");add("3");}});
+	//	fc.add(new ArrayList<String>() {{add("c1");add("1");}});
+	//	fc.add(new ArrayList<String>() {{add("c1");add("2");}});
+	//	fc.add(new ArrayList<String>() {{add("c2");add("3");}});
+	//	fc.add(new ArrayList<String>() {{add("c1");add("2");add("3");}});
+	///*
+		Object[] ckeys = cliques.keySet().toArray();
+		for(int i = 0 ; i<cliques.size(); i++) {
+			String s = (String) ckeys[i];
+			fc.add(new ArrayList<String>() {{add(s);}});
+		}
+		for(int i = 0; i<sharedV.size(); i++) {
+				String c = sharedV.get(keys.get(i)).get(0); //c1
+				int index=-1;
+				for(int j = 0 ; j< fc.size(); j++) {
+					if(fc.get(j).get(0).equals(c)) {
+						index = j;
+					}
+				}
+				fc.get(index).add(keys.get(i));
+		}
 		
+		optimizefc();
+		//*/
+		System.out.println("fc : "+ fc);
 	}
+
+
+	private void optimizefc() {
+		// TODO Auto-generated method stub
+		Object[] ckeys = cliques.keySet().toArray();
+		
+		for(int i = 0 ; i < cliques.size(); i++) {
+			if(!keys.containsAll(cliques.get(ckeys[i]))) {
+				String r = (String) ckeys[i]; //c1
+				int index=-1;
+				for(int j = 0 ; j< fc.size(); j++) {
+					if(fc.get(j).get(0).equals(r)) {
+						index = j;
+					}
+				}
+				fc.remove(index);
+			}
+		}
+	}
+
+
 
 
 	public void cbuild(String in) {
@@ -216,11 +258,12 @@ public class Maximal {
 			if(!step5(tempN)) {
 			//	System.out.println( "keys : "+(i+1)+": "+ tempN.keysN);
 			//	System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
-				
+
 					tree.push(tempN);
 				
 			}
 			else {
+
 				//System.out.println( "cliques : "+(i+1)+": "+ tempN.cN);
 			//	System.out.println("Step 5 : Failed");
 				break;
@@ -288,7 +331,7 @@ public class Maximal {
 		for(int i = 0; i<cn.keySet().size(); i++) {
 			for(int j = 0 ; j<fc.size() ; j++) {
 				if(fc.get(j).containsAll(cn.get(cnkeys[i]))&&(fc.get(j).get(0).equals(cnkeys[i]))) {
-					
+					System.out.println(cn.get(cnkeys[i]));
 					return true;
 				}
 			}
