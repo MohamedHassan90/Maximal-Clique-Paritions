@@ -13,22 +13,6 @@ import java.util.TreeMap;
 /**
  * This is our Main class, where the main method exists.  
  */
-class Node {
-	
-	
-	HashMap<String, ArrayList<String>> cN;
-	HashMap<String, ArrayList<String>> svN;
-	ArrayList<String> keysN;
-	
-	
-	public Node (HashMap<String, ArrayList<String>> c , HashMap<String, ArrayList<String>> s, ArrayList<String>k ) {
-		this.svN = s;
-		this.cN = c ;
-		this.keysN = k;
-	}
-
-}
-
 
 public class Maximal {
 	
@@ -47,10 +31,10 @@ public class Maximal {
 	public Maximal (String input) {
 	
 	cbuild(input);  //Constructing the Cliques	
-	kbuild(); //Constructing the keys ArrayList
+	kbuild(input); //Constructing the keys ArrayList
 	sVbuild(); //Constructing the SharedVertices
 	fcbuild(); //Constructing the fc
-	System.out.print(keys);
+	ebuild();
 	
 	Node root = new Node(cliques,sharedV,keys);
 	tree.push(root);
@@ -73,18 +57,48 @@ public class Maximal {
 	}
 	
 	
-	
+	private void ebuild() {
+		Object[] ckeys = cliques.keySet().toArray();
+		
+		for(int i = 0 ; i< ckeys.length ; i++ ) {
+			
+		}
+	}
 
-	private void kbuild() {
+
+	public void cbuild(String in) {
+
+		Pattern p = Pattern.compile("(\\w+)\\s*\\[([a-zA-Z-0-9,]+)\\]");
+		Matcher mm = p.matcher(in);
+		int i = 0;
+		
+		while(mm.find()) { 
+			i++;
+			
+		    String[] temp = mm.group(2).split(",");
+			cliques.put(mm.group(1),new ArrayList<String>());
+		    for(int j = 0; j<temp.length;j++){
+				cliques.get("c"+i).add(temp[j]);
+		    }
+		}
+
+	}	
+	
+	
+	private void kbuild(String input) {
 
 		ArrayList<String> a = new ArrayList<String>();
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		Set<String> k = new HashSet<String>();
-		Collection c = cliques.values();
-		Pattern p = Pattern.compile("\\d+");
-		Matcher m = p.matcher(c.toString());
+		Pattern p = Pattern.compile("(\\w+)\\s*\\[([a-zA-Z-0-9,]+)\\]");
+		Matcher m = p.matcher(input);
+
 		while (m.find()) {
-			a.add(m.group());
+			String[] temp = m.group(2).split(",");
+			
+		    for(int j = 0; j<temp.length;j++){
+		    	a.add(temp[j]);
+		    }
 		}
 		
 		for(int i = 0; i<a.size();i++) {
@@ -100,8 +114,13 @@ public class Maximal {
 				k.add((String) ckeys[i]);
 			}
 		}
-		keys.addAll(k);
+		keys.addAll(k);	
 	}
+	
+	
+	
+	
+	
 
 
 
@@ -165,23 +184,7 @@ public class Maximal {
 
 
 
-	public void cbuild(String in) {
 
-		Pattern p = Pattern.compile("\\[(.*?)\\]");
-		Matcher mm = p.matcher(in);
-		int i = 0;
-		while(mm.find()) {
-			i++;
-				
-		    String[] temp = mm.group(1).split(",");
-			cliques.put("c"+i,new ArrayList<String>());
-		    for(int j = 0; j<temp.length;j++){
-				cliques.get("c"+i).add(temp[j]);
-		    }
-		}
-	
-	}	
-	
 
 	private  boolean step2(Node node) { // false if empty
 		if(node.keysN.isEmpty()) {
@@ -215,11 +218,14 @@ public class Maximal {
 		
 			}
 			keys.remove(0);
-
 			Node tempN = new Node(cn,svn,keys);
 			step4(tempN);
 
 			if(!step5(tempN)) {
+				
+				
+			//	System.out.println( "svn"+tempN.svN); //printing partitions
+			//	System.out.println( "cn"+tempN.cN); //printing partitions
 					tree.push(tempN);	
 			}
 			else {
@@ -327,5 +333,37 @@ public class Maximal {
 			}
 		}
 		return null;	
+	}
+	
+	// for stage 3 
+	public ArrayList<Edge> generateEdges() {
+		
+		Object[]ckeys = cliques.keySet().toArray();
+		ArrayList<Edge>result = new ArrayList<Edge>();
+		for(int i = 0 ; i< ckeys.length ; i++ ) {
+			for(int x = 0; x< cliques.get(ckeys[i]).size() ; x++) {
+				for (int y = x+1; y<cliques.get(ckeys[i]).size() ; y++) {
+					HashSet<String> s = new HashSet<String>();
+					s.add(cliques.get(ckeys[i]).get(x));
+					s.add(cliques.get(ckeys[i]).get(y));
+						result.add(new Edge( s.toArray()[0].toString(),s.toArray()[1].toString()));
+				}
+			}
+		}
+		removeDuplicates(result);
+		return result;
+	}
+	public void removeDuplicates(ArrayList<Edge>edges) {
+		for(int i = 0; i<edges.size(); i++) {
+			for(int j = i+1; j<edges.size(); j++) {
+				String v11 = edges.get(i).vertex1;
+				String v12 = edges.get(i).vertex2;
+				String v21 = edges.get(j).vertex1;
+				String v22 = edges.get(j).vertex2;
+				if((v11.equals(v21)&&v12.equals(v22))||(v11.equals(v22)&&v12.equals(v21))) {
+					edges.remove(j);
+				}
+			}
+		}
 	}
 }
