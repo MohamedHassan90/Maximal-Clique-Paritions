@@ -61,12 +61,11 @@ public class Interaction extends JFrame implements MouseListener {
 	Graphics2D g2 = (Graphics2D) g;
 	int vertexHeight = Math.max(height, f.getHeight());
 	addMouseListener(this);
-	g2.setStroke(new BasicStroke(6));
+	g2.setStroke(new BasicStroke(4));
 	g2.setColor(Color.black);
 	for (edge e : edges) {
 	    g2.drawLine(vertices.get(e.i).x, vertices.get(e.i).y,
 		     vertices.get(e.j).x, vertices.get(e.j).y);
-	
 	}
 
 	for (Vertex n : vertices) {
@@ -82,36 +81,58 @@ public class Interaction extends JFrame implements MouseListener {
 			 n.y+f.getHeight()/2);
 	}
     }
+    
+    
+    public static void draw (HashMap<String,ArrayList<String>> p , ArrayList<Edge> edges) {
+
+    	Set<String> Ver= new HashSet<String>();
+    	Object[] pKeys = p.keySet().toArray();
+    	for(int i =0 ; i<p.keySet().size();i++) {
+    		Ver.addAll(p.get(pKeys[i]));
+    	}
+    	
+    	int windowSize = 700;
+
+    	Interaction frame = new Interaction("Maximal Clique Partioning");
+    	frame.setSize(windowSize,windowSize);	
+    	frame.setVisible(true);
+    	
+    int 	verNums = Ver.size(); //number of verticies
+    	double theta = 360/verNums ;
+    	double degree = Math.toRadians(theta);
+    	int radius = (windowSize-100)/2;
+    	int cx = windowSize/2;
+    	int cy = windowSize/2;
+
+    	
+    	for (int i =0; i< verNums; i++) {
+    		int x = (int) (cx+(radius*Math.cos(degree*i)));
+    		int y = (int) (cy+(radius*Math.sin(degree*i)));
+    		
+    		frame.addVertex(""+i, x,y);
+    	}
+    	
+    	
+    	frame.addEdge(0,1);
+
+    	frame.addEdge(2,3);
+
+    }
     //The actual graph part
     public static void main(String[] args) {
-	Interaction frame = new Interaction("Maximal Clique Partioning");
-	frame.setSize(900,700);	
-	frame.setVisible(true);
+    	
 	//Original Graph
-	frame.addVertex("1", 50,350);//0
-	frame.addVertex("2", 240,150); //1
-	frame.addVertex("3", 240,550); //2
-	frame.addVertex("4", 430,350); //3
-	frame.addVertex("5", 620,150);//4
-	frame.addVertex("6", 620,550);//5
-	frame.addVertex("7", 810,350);//6
-	frame.addEdge(0,1);
-	frame.addEdge(0,2);
-	frame.addEdge(1,2);
-	frame.addEdge(2, 3);
-	frame.addEdge(1, 3);
-	frame.addEdge(3, 4);
-	frame.addEdge(3, 5);
-	frame.addEdge(5, 6);
-	frame.addEdge(4, 6);
-	frame.addEdge(4, 5);
+	
+	
+
     }
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		  int m = e.getX();
-		  int n = e.getY();
-		  
-		      }
+		  int n = e.getY();	  
+	}
+	
+	
 //	//Partion one
 //	
 //	frame.addVertex("1", 330,70);//7
@@ -217,6 +238,10 @@ public class Interaction extends JFrame implements MouseListener {
 //    }
 
 
+	private void setEdgeColor(Color red) {
+	
+	}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
