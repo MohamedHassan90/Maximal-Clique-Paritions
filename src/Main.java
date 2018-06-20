@@ -28,6 +28,7 @@ public class Main {
 		Maximal m = new Maximal(input);
 		ArrayList<Edge> mainEdges = m.generateEdges();
 		Edge e1 = new Edge("4", "6");
+		
 		Stage3 s1 = new Stage3(mainEdges, e1);
 		// Edge e2 = new Edge("","5");
 		// Stage3 s2 = new Stage3(mainEdges, e2);
