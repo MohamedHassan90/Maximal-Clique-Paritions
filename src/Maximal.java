@@ -24,6 +24,7 @@ public class Maximal {
 	public int partition = 0;
 	public int nodes = 0;
 	boolean delete = false;
+	public ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>> ();
 
 	@SuppressWarnings("unchecked")
 
@@ -47,6 +48,7 @@ public class Maximal {
 				} else {
 					partition++;
 					Map<String, ArrayList<String>> par = new TreeMap<>(tree.peek().cN);
+					partitions.add(par);
 					System.out.println("P" + partition + " : " + par); // printing partitions
 				}
 				tree.pop();
@@ -320,17 +322,17 @@ public class Maximal {
 		return null;
 	}
 
-	// for stage 3
-	public ArrayList<Edge> generateEdges() {
+	// for stage 3 & drawing
+	public ArrayList<Edge> generateEdges(Map<String,ArrayList<String>> temp) {
 
-		Object[] ckeys = cliques.keySet().toArray();
+		Object[] ckeys = temp.keySet().toArray();
 		ArrayList<Edge> result = new ArrayList<Edge>();
 		for (int i = 0; i < ckeys.length; i++) {
-			for (int x = 0; x < cliques.get(ckeys[i]).size(); x++) {
-				for (int y = x + 1; y < cliques.get(ckeys[i]).size(); y++) {
+			for (int x = 0; x < temp.get(ckeys[i]).size(); x++) {
+				for (int y = x + 1; y < temp.get(ckeys[i]).size(); y++) {
 					HashSet<String> s = new HashSet<String>();
-					s.add(cliques.get(ckeys[i]).get(x));
-					s.add(cliques.get(ckeys[i]).get(y));
+					s.add(temp.get(ckeys[i]).get(x));
+					s.add(temp.get(ckeys[i]).get(y));
 					result.add(new Edge(s.toArray()[0].toString(), s.toArray()[1].toString()));
 				}
 			}

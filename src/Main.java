@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -26,10 +27,15 @@ public class Main {
 			e1.printStackTrace();
 		}
 		Maximal m = new Maximal(input);
-		ArrayList<Edge> mainEdges = m.generateEdges();
-		Edge e1 = new Edge("4", "6");
+		ArrayList<Edge> mainEdges = m.generateEdges(m.cliques);
 		
-		Stage3 s1 = new Stage3(mainEdges, e1);
+	//	for(int i=0; i<m.partitions.size();i++) {
+		ArrayList<Edge> parEdges = m.generateEdges(m.partitions.get(1));
+			Interaction.draw( m.partitions.get(1), parEdges);
+	//	}
+	//	Edge e1 = new Edge("4", "6");
+		
+	//	Stage3 s1 = new Stage3(mainEdges, e1);
 		// Edge e2 = new Edge("","5");
 		// Stage3 s2 = new Stage3(mainEdges, e2);
 		// Edge e3 = new Edge("6","7");

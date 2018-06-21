@@ -83,12 +83,12 @@ public class Interaction extends JFrame implements MouseListener {
     }
     
     
-    public static void draw (HashMap<String,ArrayList<String>> p , ArrayList<Edge> edges) {
-
-    	Set<String> Ver= new HashSet<String>();
-    	Object[] pKeys = p.keySet().toArray();
-    	for(int i =0 ; i<p.keySet().size();i++) {
-    		Ver.addAll(p.get(pKeys[i]));
+    public static void draw (Map<String, ArrayList<String>> map , ArrayList<Edge> edges) {
+    	HashMap<String,Integer> verKeys = new HashMap<String,Integer>();
+    	ArrayList<String> Ver= new ArrayList<String>();
+    	Object[] pKeys = map.keySet().toArray();
+    	for(int i =0 ; i<map.keySet().size();i++) {
+    		Ver.addAll(map.get(pKeys[i]));
     	}
     	
     	int windowSize = 700;
@@ -97,35 +97,37 @@ public class Interaction extends JFrame implements MouseListener {
     	frame.setSize(windowSize,windowSize);	
     	frame.setVisible(true);
     	
-    int 	verNums = Ver.size(); //number of verticies
+    int 	verNums = Ver.size(); //number of vertices
     	double theta = 360/verNums ;
     	double degree = Math.toRadians(theta);
     	int radius = (windowSize-100)/2;
     	int cx = windowSize/2;
     	int cy = windowSize/2;
 
-    	
+    	//adding the vertices 
     	for (int i =0; i< verNums; i++) {
     		int x = (int) (cx+(radius*Math.cos(degree*i)));
     		int y = (int) (cy+(radius*Math.sin(degree*i)));
-    		
-    		frame.addVertex(""+i, x,y);
+    		frame.addVertex(""+Ver.get(i), x,y);
+    		verKeys.put(Ver.get(i),i);
     	}
     	
+    	//adding the edges
+    	for (int i =0; i< edges.size(); i++) {
+    		Edge e = edges.get(i);
+    		String v1= e.vertex1;
+    		String v2= e.vertex2;
+    		
+        	frame.addEdge(verKeys.get(v1),verKeys.get(v2));
+        	System.out.println(verKeys.get(v1)+" : "+verKeys.get(v2));
+
+    	}
     	
-    	frame.addEdge(0,1);
-
-    	frame.addEdge(2,3);
-
+    	System.out.println(verKeys);
+    	
     }
     //The actual graph part
-    public static void main(String[] args) {
-    	
-	//Original Graph
-	
-	
 
-    }
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		  int m = e.getX();
