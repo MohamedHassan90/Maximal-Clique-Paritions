@@ -1,30 +1,34 @@
 import java.util.*;
+
 import javax.swing.JButton;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.Line2D;
-public class Interaction extends JFrame {
+public class Interaction extends JFrame implements ActionListener {
+	//static JFrame frame;
+	JFrame frame = new JFrame();
+	
     int width;
     int height;
     ArrayList<Vertex> vertices;
     ArrayList<edge> edges;
+    
     public Interaction() { //Constructor
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vertices = new ArrayList<Vertex>();
         edges = new ArrayList<edge>();
         width = 30;
         height = 30;
     }
-    public Interaction(String name) { //Construct with label
+  //Constructor with label
+    public Interaction(String name) { 
 	this.setTitle(name);
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	vertices = new ArrayList<Vertex>();
 	edges = new ArrayList<edge>();
 	width = 30;
-	height = 30;
+	height = 30; 
     }
 
     class Vertex {
@@ -60,10 +64,7 @@ public class Interaction extends JFrame {
     public void paint(Graphics g) { // draw the nodes and edges
 	FontMetrics f = g.getFontMetrics();
 	Graphics2D g2 = (Graphics2D) g;
-	//Mouse listener for the GUI
-	//addMouseListener(this);
 
-	
 	//vertex height
 	int vertexHeight = Math.max(height, f.getHeight());
 	//Drawing edges
@@ -90,7 +91,8 @@ public class Interaction extends JFrame {
     }
     
     
-    public static void draw (Map<String, ArrayList<String>> map , ArrayList<Edge> edges) {
+  
+	public static void draw (Map<String, ArrayList<String>> map , ArrayList<Edge> edges) {
     	HashMap<String,Integer> verKeys = new HashMap<String,Integer>();
     	ArrayList<String> Ver= new ArrayList<String>();
     	Object[] pKeys = map.keySet().toArray();
@@ -102,13 +104,24 @@ public class Interaction extends JFrame {
 
     	Interaction frame = new Interaction("Maximal Clique Partioning");
     	frame.setSize(windowSize,windowSize);	
+    	
     	//Buttons
-    	JButton next = new JButton("Next");
-    	next.setBounds(590, 560, 80, 60);
+    	
+    	//Next
+  
+    	JButton next = new JButton("Next");	
+    	next.setBounds(590, 560, 80, 60);   
+    	frame.add(next);   	
+    	next.addActionListener((ActionListener) next); 	     	
+    	
+    	//Back
     	JButton back = new JButton("Previous");
-    	back.setBounds(60, 560, 80, 60);
-    	frame.add(next);
-    	frame.add(back);
+    back.setBounds(60, 560, 80, 60);  	
+    frame.add(back); 	
+    back.addActionListener((ActionListener) back);  
+    
+    	
+   
     	
     int 	verNums = Ver.size(); //number of vertices
     	double theta = 360/verNums ;
@@ -137,12 +150,17 @@ public class Interaction extends JFrame {
         	System.out.println(verKeys.get(v1)+" : "+verKeys.get(v2));
 
     	}
-    	
+
     	System.out.println(verKeys);
     frame.setLayout(null); 	  
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	frame.setVisible(true);
     	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// Code that will need to react to the buttons
+		
+	}
    
 
 }
