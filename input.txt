@@ -1,4 +1,4 @@
-c1[1,2,3],c2[2,3,4],c3[4,5,6],c4[5,6,7]
+c1[A,B],c2[A,C],c3[C,D],c4[B,E]
 
 // Input is read from first line only 
 

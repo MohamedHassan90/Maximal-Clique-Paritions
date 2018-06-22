@@ -1,3 +1,5 @@
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,12 +30,22 @@ public class Main {
 		}
 		Maximal m = new Maximal(input);
 		ArrayList<Edge> mainEdges = m.generateEdges(m.cliques);
+		ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>(); //arraylist containing all edges for each partition
+		for(int i=0; i<m.partitions.size();i++) {
+			parEdges.add(m.generateEdges(m.partitions.get(i)));
+		}
+		Interaction frame = new Interaction("Maximal Graphs",700);
 		
-	//	for(int i=0; i<m.partitions.size();i++) {
-		ArrayList<Edge> parEdges = m.generateEdges(m.partitions.get(1));
-			Interaction.draw( m.partitions.get(1), parEdges);
-	//	}
-	//	Edge e1 = new Edge("4", "6");
+		
+		Draw d = new Draw(frame, mainEdges, parEdges, m.partitions);
+
+		//Interaction.draw( m.partitions.get(2), parEdges);
+
+			
+			
+			
+			
+			//	Edge e1 = new Edge("4", "6");
 		
 	//	Stage3 s1 = new Stage3(mainEdges, e1);
 		// Edge e2 = new Edge("","5");
@@ -59,5 +71,4 @@ public class Main {
 		// System.out.println("result : "+s.intersection(x,y));
 
 	}
-
 }
