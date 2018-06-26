@@ -1,3 +1,4 @@
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -5,18 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Draw {
 
-	int currentPar = 0;
-	Interaction frame;
+	static int currentPar = 0;
+	static int windowSize = 700;
+	static Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
 	ArrayList<Edge> mainEdges;
-	ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>();
-	ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
+	static ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>();
+	static ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
 
-	public Draw(Interaction f, ArrayList<Edge> me, ArrayList<ArrayList<Edge>> pr,
+	public Draw(ArrayList<Edge> me, ArrayList<ArrayList<Edge>> pr,
 			ArrayList<Map<String, ArrayList<String>>> p) {
-		this.frame = f;
 		this.partitions = p;
 		this.mainEdges = me;
 		this.parEdges = pr;
@@ -26,29 +29,31 @@ public class Draw {
 
 	public void initFrame() {
 
+		frame.setSize(windowSize, windowSize);
+		frame.setLayout(new FlowLayout());
 		draw(partitions.get(0), mainEdges); // draw original graph
 
 	}
 
-	public void nextButton() {
-		if (currentPar < partitions.size()) {
-			frame.edges.clear();
-			frame.vertices.clear();
-			frame.repaint();
-			System.out.println("inside");
-			// draw(partitions.get(currentPar), parEdges.get(currentPar));
+	public static void nextButton() {
+		if (currentPar < partitions.size()-1) {
 			currentPar++;
 		}
+		frame.clearFrame();
+		frame.repaint();
+		//draw(partitions.get(currentPar), parEdges.get(currentPar));
 	}
 
-	public void prevButton() {
-		if (currentPar >= 0) {
-			draw(partitions.get(currentPar), parEdges.get(currentPar));
+	public static void prevButton() {
+		if (currentPar > 0) {
 			currentPar--;
 		}
+		draw(partitions.get(currentPar), parEdges.get(currentPar));
+
 	}
 
 	public static void draw(Map<String, ArrayList<String>> map, ArrayList<Edge> edges) {
+
 		HashMap<String, Integer> verKeys = new HashMap<String, Integer>();
 		ArrayList<String> Ver = new ArrayList<String>();
 		Object[] pKeys = map.keySet().toArray();
@@ -56,10 +61,6 @@ public class Draw {
 			Ver.addAll(map.get(pKeys[i]));
 		}
 
-		int windowSize = 700;
-
-		Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
-		frame.setSize(windowSize, windowSize);
 
 		// Buttons
 
@@ -72,11 +73,12 @@ public class Draw {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				frame.repaint();
 				System.out.println("GET ME NEXT");
+				nextButton();
 			}
 		});
-
-		// Back
+		
 		JButton back = new JButton("Previous");
 		back.setBounds(60, 560, 80, 60);
 		frame.add(back);
@@ -84,10 +86,13 @@ public class Draw {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				System.out.print("GET ME BACK");
+				prevButton();
 			}
 		});
+
+		// Back
+		
 
 		int verNums = Ver.size(); // number of vertices
 		double theta = 360 / verNums;
@@ -115,6 +120,5 @@ public class Draw {
 			System.out.println(verKeys.get(v1) + " : " + verKeys.get(v2));
 
 		}
-
 	}
 }

@@ -2,12 +2,13 @@ import java.util.*;
 
 import javax.swing.JButton;
 
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.Line2D;
 
-public class Interaction extends JFrame implements MouseListener {
+public class Interaction extends JFrame implements MouseListener, ActionListener {
 	int width;
 	int height;
 	int windowSize;
@@ -46,6 +47,11 @@ public class Interaction extends JFrame implements MouseListener {
 			i = ii;
 			j = jj;
 		}
+	}
+	
+	public void clearFrame() {
+		this.vertices.clear();
+		this.edges.clear();
 	}
 
 	public void addVertex(String name, int x, int y) {
@@ -96,7 +102,7 @@ public class Interaction extends JFrame implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -108,13 +114,18 @@ public class Interaction extends JFrame implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 	}
 
 }

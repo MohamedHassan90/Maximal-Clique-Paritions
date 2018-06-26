@@ -30,30 +30,25 @@ public class Main {
 		}
 		Maximal m = new Maximal(input);
 		ArrayList<Edge> mainEdges = m.generateEdges(m.cliques);
-		ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>(); //arraylist containing all edges for each partition
-		for(int i=0; i<m.partitions.size();i++) {
+		ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>(); // arraylist containing all edges for
+																				// each partition
+		for (int i = 0; i < m.partitions.size(); i++) {
 			parEdges.add(m.generateEdges(m.partitions.get(i)));
 		}
-		Interaction frame = new Interaction("Maximal Graphs",700);
-		
-		
-		Draw d = new Draw(frame, mainEdges, parEdges, m.partitions);
+		// Interaction frame = new Interaction("Maximal Graphs",700);
 
-		//Interaction.draw( m.partitions.get(2), parEdges);
+		// Draw d = new Draw(mainEdges, parEdges, m.partitions);
 
-			
-			
-			
-			
-			//	Edge e1 = new Edge("4", "6");
-		
-	//	Stage3 s1 = new Stage3(mainEdges, e1);
-		// Edge e2 = new Edge("","5");
-		// Stage3 s2 = new Stage3(mainEdges, e2);
-		// Edge e3 = new Edge("6","7");
-		// Stage3 s3 = new Stage3(mainEdges, e3);
-		// Edge e4 = new Edge("2","4");
-		// Stage3 s4 = new Stage3(mainEdges, e4);
+		// Interaction.draw( m.partitions.get(2), parEdges);
+
+		Edge e1 = new Edge("4", "6");
+		Stage3 s1 = new Stage3(mainEdges, e1);
+		Edge e2 = new Edge("4", "5");
+		Stage3 s2 = new Stage3(mainEdges, e2);
+		Edge e3 = new Edge("6", "7");
+		Stage3 s3 = new Stage3(mainEdges, e3);
+		 Edge e4 = new Edge("5","7");
+		 Stage3 s4 = new Stage3(mainEdges, e4);
 		// disabled nodes should not do modifications !!! needs to be fixed
 
 		// s.printEdges();

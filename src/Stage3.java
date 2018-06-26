@@ -18,11 +18,28 @@ public class Stage3 {
 		this.edges = e;
 		v1 = edge.vertex1;
 		v2 = edge.vertex2;
-
+		
+		if(isEnabled(edge)) {
 		chooseEdge(edge);
 		disable();
-
 		printEdges();
+		}else {
+			System.out.println("Chosen Edge ["+(edge.vertex1)+","+(edge.vertex2)+"] is disabled");
+		}
+	}
+
+	private boolean isEnabled(Edge edge) {
+		
+		for(int i =0; i<edges.size(); i++) {
+			Edge current = edges.get(i);
+
+			if((current.vertex1.equals(edge.vertex1) && current.vertex2.equals(edge.vertex2))||(current.vertex1.equals(edge.vertex2) && current.vertex2.equals(edge.vertex1))) {
+
+				return current.isEnabled;
+			}
+			
+		}	
+		return false;
 	}
 
 	public void printEdges() {
