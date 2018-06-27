@@ -9,7 +9,10 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+/*The class Draw draws the specific partitions based on what is read in from the file.
+ * It contains methods for a next and previous button, border layout, and the algorithim in order to draw
+ * the graph into a circle given any set of vertices added. 
+ */
 public class Draw {
 
 	static int currentPar = 0;
@@ -22,6 +25,9 @@ public class Draw {
 	static ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>();
 	static ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
 
+	/*This method pulls array lists necessary to draw the partions and edges from
+	 * Edge.java, and also calls on the initializing frame.
+	 */
 	public Draw(ArrayList<Edge> me, ArrayList<ArrayList<Edge>> pr,
 			ArrayList<Map<String, ArrayList<String>>> p) {
 		this.partitions = p;
@@ -31,10 +37,15 @@ public class Draw {
 		initFrame();
 	}
 
+	/*This method adds the border layout to the page in order to align the buttons at the bottom,
+	 * which in turn will send information regarding which button is clicked to the other classes to determine
+	 * the next partion to be drawn.
+	 * 
+	 */
 	public void initFrame() {
 
 		frame.setSize(windowSize, windowSize);
-		frame.setLayout(new BorderLayout());//new FlowLayout());
+		frame.setLayout(new BorderLayout());
 		frame.add(bottom, BorderLayout.PAGE_END);
 		next.setBounds(590, 560, 80, 60);
 		next.addActionListener(new ActionListener() {
@@ -61,7 +72,9 @@ public class Draw {
 		draw(partitions.get(0), mainEdges); // draw original graph
 
 	}
-
+/*This method determines the next partion to be drawn by going through the partions
+ * array list
+ */
 	public static void nextButton() {
 		if (currentPar < partitions.size()-1) {
 			currentPar++;
@@ -70,7 +83,9 @@ public class Draw {
 		frame.repaint();
 		draw(partitions.get(currentPar), parEdges.get(currentPar));
 	}
-
+	/*This method determines the previous partion to be drawn by going through the partions
+	 * array list
+	 */
 	public static void prevButton() {
 		if (currentPar > 0) {
 			currentPar--;
@@ -78,7 +93,10 @@ public class Draw {
 		draw(partitions.get(currentPar), parEdges.get(currentPar));
 
 	}
-
+/*This method determines the amount of vertices to be drawn based on the input file.
+ * It positions the vertices based on a unit circle, and draws the edges to attach
+ * to the appropriate vertices.
+ */
 	public static void draw(Map<String, ArrayList<String>> map, ArrayList<Edge> edges) {
 
 		HashMap<String, Integer> verKeys = new HashMap<String, Integer>();
@@ -86,14 +104,7 @@ public class Draw {
 		Object[] pKeys = map.keySet().toArray();
 		for (int i = 0; i < map.keySet().size(); i++) {
 			Ver.addAll(map.get(pKeys[i]));
-		}
-//Moved to the intializing method initframe
-//		int windowSize = 700;
-//		Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
-//		frame.setSize(windowSize,windowSize);
-//		frame.setLayout(new BorderLayout());
-
-		
+		}	
 
 		int verNums = Ver.size(); // number of vertices
 		double theta = 360 / verNums;
