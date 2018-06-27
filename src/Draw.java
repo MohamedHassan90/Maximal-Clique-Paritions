@@ -57,6 +57,7 @@ public class Draw {
 				prevButton();
 			}
 		});
+		
 		draw(partitions.get(0), mainEdges); // draw original graph
 
 	}
@@ -67,7 +68,7 @@ public class Draw {
 		}
 		frame.clearFrame();
 		frame.repaint();
-		//draw(partitions.get(currentPar), parEdges.get(currentPar));
+		draw(partitions.get(currentPar), parEdges.get(currentPar));
 	}
 
 	public static void prevButton() {

@@ -39,7 +39,7 @@ public class Main {
 
 		 Draw d = new Draw(mainEdges, parEdges, m.partitions);
 
-		// Interaction.draw( m.partitions.get(2), parEdges);
+//		 Interaction.draw( m.partitions.get(2), parEdges);
 
 		Edge e1 = new Edge("4", "6");
 		Stage3 s1 = new Stage3(mainEdges, e1);
