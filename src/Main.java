@@ -35,9 +35,9 @@ public class Main {
 		for (int i = 0; i < m.partitions.size(); i++) {
 			parEdges.add(m.generateEdges(m.partitions.get(i)));
 		}
-		// Interaction frame = new Interaction("Maximal Graphs",700);
+		 //Interaction frame = new Interaction("Maximal Graphs",700);
 
-		// Draw d = new Draw(mainEdges, parEdges, m.partitions);
+		 Draw d = new Draw(mainEdges, parEdges, m.partitions);
 
 		// Interaction.draw( m.partitions.get(2), parEdges);
 
@@ -50,6 +50,7 @@ public class Main {
 		 Edge e4 = new Edge("5","7");
 		 Stage3 s4 = new Stage3(mainEdges, e4);
 		// disabled nodes should not do modifications !!! needs to be fixed
+		 //Fixed? ^
 
 		// s.printEdges();
 		// s.chooseEdge(s.edges.get(0));
@@ -64,6 +65,5 @@ public class Main {
 		// y.add("6");
 
 		// System.out.println("result : "+s.intersection(x,y));
-
 	}
 }

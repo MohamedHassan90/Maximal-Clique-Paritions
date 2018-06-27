@@ -1,12 +1,7 @@
-/Interaction.class
-/Main.class
-/Maximal$1.class
-/Maximal$2.class
-/Maximal$3.class
-/Maximal.class
-/Node.class
-/Stage3.class
-/Interaction$Vertex.class
-/Interaction$edge.class
 /Draw$1.class
 /Draw$2.class
+/Draw.class
+/Interaction$Vertex.class
+/Interaction$edge.class
+/Interaction.class
+/Main.class

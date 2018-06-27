@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,9 @@ public class Draw {
 	static int currentPar = 0;
 	static int windowSize = 700;
 	static Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
+	JPanel bottom = new JPanel(new BorderLayout());
+	JButton next = new JButton("Next");
+	JButton back = new JButton("Previous");
 	ArrayList<Edge> mainEdges;
 	static ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>();
 	static ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
@@ -30,7 +34,29 @@ public class Draw {
 	public void initFrame() {
 
 		frame.setSize(windowSize, windowSize);
-		frame.setLayout(new FlowLayout());
+		frame.setLayout(new BorderLayout());//new FlowLayout());
+		frame.add(bottom, BorderLayout.PAGE_END);
+		next.setBounds(590, 560, 80, 60);
+		next.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.repaint();
+				System.out.println("GET ME NEXT");
+				nextButton();
+			}
+		});
+		bottom.add(next, BorderLayout.LINE_END);
+		back.setBounds(60, 560, 80, 60);
+		bottom.add(back, BorderLayout.LINE_START);
+		back.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.print("GET ME BACK");
+				prevButton();
+			}
+		});
 		draw(partitions.get(0), mainEdges); // draw original graph
 
 	}
@@ -60,38 +86,12 @@ public class Draw {
 		for (int i = 0; i < map.keySet().size(); i++) {
 			Ver.addAll(map.get(pKeys[i]));
 		}
+//Moved to the intializing method initframe
+//		int windowSize = 700;
+//		Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
+//		frame.setSize(windowSize,windowSize);
+//		frame.setLayout(new BorderLayout());
 
-
-		// Buttons
-
-		// Next
-
-		JButton next = new JButton("Next");
-		next.setBounds(590, 560, 80, 60);
-		frame.add(next);
-		next.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.repaint();
-				System.out.println("GET ME NEXT");
-				nextButton();
-			}
-		});
-		
-		JButton back = new JButton("Previous");
-		back.setBounds(60, 560, 80, 60);
-		frame.add(back);
-		back.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.print("GET ME BACK");
-				prevButton();
-			}
-		});
-
-		// Back
 		
 
 		int verNums = Ver.size(); // number of vertices

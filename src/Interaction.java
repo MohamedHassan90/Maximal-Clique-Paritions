@@ -26,7 +26,8 @@ public class Interaction extends JFrame implements MouseListener, ActionListener
 		this.windowSize = ws;
 		this.setSize(windowSize, windowSize);
 		this.setVisible(true);
-
+		//Makes sure everything is in the window
+		this.pack();
 	}
 
 	class Vertex {
