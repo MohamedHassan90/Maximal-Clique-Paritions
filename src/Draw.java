@@ -17,7 +17,6 @@ public class Draw {
 	static ArrayList<Edge> mainEdges = new ArrayList<Edge>();
 	static int currentPar = 0;
 	static int windowSize = 700;
-	static Interaction frame = new Interaction("Maximal Clique Partioning", windowSize, mainEdges);
 	JPanel bottom = new JPanel(new BorderLayout());
 	JButton next = new JButton("Next");
 	JButton back = new JButton("Previous");
@@ -33,7 +32,6 @@ public class Draw {
 		this.mainEdges = me;
 		this.parEdges = pr;
 
-		initFrame();
 	}
 
 	/*
@@ -44,60 +42,19 @@ public class Draw {
 	 */
 	public void initFrame() {
 
-		frame.setSize(windowSize, windowSize);
-		frame.setLayout(new BorderLayout());
-		frame.add(bottom, BorderLayout.PAGE_END);
-		next.setBounds(590, 560, 80, 60);
-		next.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.repaint();
-				nextButton();
-			}
-		});
-		bottom.add(next, BorderLayout.LINE_END);
-		back.setBounds(60, 560, 80, 60);
-		bottom.add(back, BorderLayout.LINE_START);
-		back.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.repaint();
-				prevButton();
-			}
-		});
-
-		draw(partitions.get(0), mainEdges); // draw original graph
-
 	}
 
 	/*
 	 * This method determines the next partion to be drawn by going through the
 	 * partions array list
 	 */
-	public static void nextButton() {
-		if (currentPar < partitions.size() - 1) {
-			currentPar++;
-		}
-		frame.clearFrame();
-		frame.repaint();
-		draw(partitions.get(currentPar), parEdges.get(currentPar));
-	}
+	
 
 	/*
 	 * This method determines the previous partition to be drawn by going through
 	 * the partitions array list
 	 */
-	public static void prevButton() {
-		if (currentPar > 0) {
-			currentPar--;
-		}
-		frame.clearFrame();
-		frame.repaint();
-		draw(partitions.get(currentPar), parEdges.get(currentPar));
-
-	}
+	
 
 	/*
 	 * This method determines the amount of vertices to be drawn based on the input
@@ -105,6 +62,10 @@ public class Draw {
 	 * to attach to the appropriate vertices.
 	 */
 	public static void draw(Map<String, ArrayList<String>> map, ArrayList<Edge> edges) {
+		Interaction frame = new Interaction("Maximal Clique Partioning", windowSize, mainEdges);
+		frame.setSize(windowSize, windowSize);
+		frame.setLayout(new BorderLayout());		
+	//	draw(partitions.get(0), mainEdges); // draw original graph
 
 		HashMap<String, Integer> verKeys = new HashMap<String, Integer>();
 		ArrayList<String> Ver = new ArrayList<String>();

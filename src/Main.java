@@ -32,9 +32,10 @@ public class Main {
 																				// each partition
 		for (int i = 0; i < m.partitions.size(); i++) {
 			parEdges.add(m.generateEdges(m.partitions.get(i)));
+			Draw d = new Draw(mainEdges, parEdges, m.partitions); // GUI draw all maximal partitions
+			d.draw(m.partitions.get(i), parEdges.get(i));
 		}
-
-		Draw d = new Draw(mainEdges, parEdges, m.partitions); // GUI draw all maximal partitions
+		
 
 		// User Interaction
 		boolean exit = false;
