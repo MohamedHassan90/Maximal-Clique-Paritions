@@ -19,9 +19,10 @@ public class Stage3 {
 		if (isEnabled(edge)) {
 			chooseEdge(edge);
 			disable();
-			printEdges();
+			printEdges(edges);
 		} else {
 			System.out.println("Chosen Edge [" + (edge.vertex1) + "," + (edge.vertex2) + "] is disabled");
+			printEdges(edges);
 		}
 	}
 
@@ -40,7 +41,8 @@ public class Stage3 {
 		return false;
 	}
 
-	public void printEdges() {
+	public void printEdges(ArrayList<Edge> edges) {
+		System.out.println("The current edges are : ");
 		for (int i = 0; i < edges.size(); i++) {
 			if (edges.get(i).isEnabled) {
 				System.out.print(" [" + edges.get(i).vertex1 + "," + edges.get(i).vertex2 + "] ");

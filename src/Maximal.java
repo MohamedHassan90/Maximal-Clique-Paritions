@@ -34,6 +34,7 @@ public class Maximal {
 
 		Node root = new Node(cliques, sharedV, keys);
 		tree.push(root); // add the root node to tree stack
+		System.out.println("Maximal partitions generated from the given graph are :");
 		while (!tree.isEmpty()) { // step1
 			if (step2(tree.peek())) { // step2
 				Node node = tree.pop();
@@ -49,8 +50,8 @@ public class Maximal {
 				}
 				tree.pop();
 			}
-
 		}
+		System.out.println("******************");
 	}
 
 	public void cbuild(String in) { // generating hash map of the cliques

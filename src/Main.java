@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
 
@@ -25,40 +26,48 @@ public class Main {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		Maximal m = new Maximal(input);
+		Maximal m = new Maximal(input); // Maximal
 		ArrayList<Edge> mainEdges = m.generateEdges(m.cliques);
 		ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>(); // arraylist containing all edges for
 																				// each partition
 		for (int i = 0; i < m.partitions.size(); i++) {
 			parEdges.add(m.generateEdges(m.partitions.get(i)));
 		}
-		// Interaction frame = new Interaction("Maximal Graphs",700);
 
-		Draw d = new Draw(mainEdges, parEdges, m.partitions);
+		Draw d = new Draw(mainEdges, parEdges, m.partitions); // GUI draw all maximal partitions
 
-		// Interaction.draw( m.partitions.get(2), parEdges);
+		// User Interaction
+		boolean exit = false;
+		System.out.println("The current edges are : ");
+		for (int i = 0; i < mainEdges.size(); i++) {
+			if (mainEdges.get(i).isEnabled) {
+				System.out.print(" [" + mainEdges.get(i).vertex1 + "," + mainEdges.get(i).vertex2 + "] ");
+			}
+		}
 
-		/*
-		 * Edge e1 = new Edge("4", "6"); Stage3 s1 = new Stage3(mainEdges, e1); Edge e2
-		 * = new Edge("4", "5"); Stage3 s2 = new Stage3(mainEdges, e2); Edge e3 = new
-		 * Edge("6", "7"); Stage3 s3 = new Stage3(mainEdges, e3); Edge e4 = new
-		 * Edge("5","7"); Stage3 s4 = new Stage3(mainEdges, e4);
-		 */
-		// disabled nodes should not do modifications !!! needs to be fixed
-		// Fixed? ^
+		System.out.println("");
+		System.out.println("write '-1' to exit");
+		Scanner scan = new Scanner(System.in); // getting input from user to select edges
+		while (!exit) {
+			System.out.println("Enter vertex 1 : ");
+			String v1 = scan.nextLine();
+			if (v1.equals("-1")) {
+				exit = true;
+				break;
+			}
+			System.out.println("Enter vertex 2 : ");
+			String v2 = scan.nextLine();
+			if (v2.equals("-1")) {
+				exit = true;
+				break;
+			}
+			Edge e1 = new Edge(v1, v2);
+			System.out.print("Edge [" + v1 + "," + v2 + "] is selected , ");
+			Stage3 s1 = new Stage3(mainEdges, e1);
+		}
+		if (exit) {
+			System.out.println("System terminated");
+		}
 
-		// s.printEdges();
-		// s.chooseEdge(s.edges.get(0));
-		// ArrayList<String>x = new ArrayList<String>() ;
-		// x.add("1");
-		// x.add("2");
-		// x.add("3");
-		//
-		// ArrayList<String>y = new ArrayList<String>() ;
-		// y.add("1");
-		// y.add("2");
-		// y.add("6");
-
-		// System.out.println("result : "+s.intersection(x,y));
 	}
 }
