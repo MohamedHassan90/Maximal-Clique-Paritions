@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,17 +15,15 @@ import java.util.TreeMap;
 
 public class Maximal {
 
-	public Stack<Node> tree = new Stack<Node>();
-	public HashMap<String, ArrayList<String>> cliques = new HashMap<String, ArrayList<String>>();
-	public HashMap<String, ArrayList<String>> sharedV = new HashMap<String, ArrayList<String>>();
-	public ArrayList<ArrayList<String>> fc = new ArrayList<ArrayList<String>>();
-	public ArrayList<String> keys = new ArrayList<String>();
-	public int partition = 0;
-	public int nodes = 0;
+	Stack<Node> tree = new Stack<Node>();
+	ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
+	HashMap<String, ArrayList<String>> cliques = new HashMap<String, ArrayList<String>>();
+	HashMap<String, ArrayList<String>> sharedV = new HashMap<String, ArrayList<String>>();
+	ArrayList<ArrayList<String>> fc = new ArrayList<ArrayList<String>>();
+	ArrayList<String> keys = new ArrayList<String>();
+	int partition = 0;
+	int nodes = 0;
 	boolean delete = false;
-	public ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>> ();
-
-	@SuppressWarnings("unchecked")
 
 	public Maximal(String input) {
 
@@ -34,18 +31,17 @@ public class Maximal {
 		kbuild(input); // Constructing the keys ArrayList
 		sVbuild(); // Constructing the SharedVertices
 		fcbuild(); // Constructing the fc
-		ebuild();
 
 		Node root = new Node(cliques, sharedV, keys);
-		tree.push(root);
-		while (!tree.isEmpty()) {
-			if (step2(tree.peek())) {
+		tree.push(root); // add the root node to tree stack
+		while (!tree.isEmpty()) { // step1
+			if (step2(tree.peek())) { // step2
 				Node node = tree.pop();
-				step3(node);// step 3 and 4 and 5 are combined //nodes are created inside step 3
+				step3(node); // step 3 and 4 and 5 are combined //nodes are created inside step 3
 			} else {
 				if (delete) {
 					delete = false;
-				} else {
+				} else { // Return the partitions
 					partition++;
 					Map<String, ArrayList<String>> par = new TreeMap<>(tree.peek().cN);
 					partitions.add(par);
@@ -57,15 +53,7 @@ public class Maximal {
 		}
 	}
 
-	private void ebuild() {
-		Object[] ckeys = cliques.keySet().toArray();
-
-		for (int i = 0; i < ckeys.length; i++) {
-
-		}
-	}
-
-	public void cbuild(String in) {
+	public void cbuild(String in) { // generating hash map of the cliques
 
 		Pattern p = Pattern.compile("(\\w+)\\s*\\[([a-zA-Z-0-9,]+)\\]");
 		Matcher mm = p.matcher(in);
@@ -83,7 +71,7 @@ public class Maximal {
 
 	}
 
-	private void kbuild(String input) {
+	private void kbuild(String input) { // generating the keys of the sharedVertices
 
 		ArrayList<String> a = new ArrayList<String>();
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
@@ -115,7 +103,8 @@ public class Maximal {
 		keys.addAll(k);
 	}
 
-	private void sVbuild() {
+	@SuppressWarnings("serial")
+	private void sVbuild() { // generating the shared vertices hash map
 		ArrayList<String> ckeys = new ArrayList<String>();
 		Map<String, ArrayList<String>> map = new TreeMap<>(cliques);
 		ckeys.addAll(map.keySet());
@@ -137,7 +126,8 @@ public class Maximal {
 		}
 	}
 
-	private void fcbuild() {
+	@SuppressWarnings("serial")
+	private void fcbuild() { // generating 2D arrayList of forbidden configurations
 		for (int i = 0; i < keys.size(); i++) {
 			String s = keys.get(i);
 			fc.add(new ArrayList<String>() {
@@ -162,18 +152,18 @@ public class Maximal {
 							add(keys.get(ii));
 							add(keys.get(jj));
 						}
-					}); // c1 ; 2(i) ; 3(j)
+					});
 
 				}
 			}
 
 		}
 
-		optimizefc(); // removing duplicated and nonshared vertices from fc
+		optimizefc();
 
 	}
 
-	private void optimizefc() {
+	private void optimizefc() { // removing duplicated and nonshared vertices from fc
 
 		for (int i = 0; i < fc.size(); i++) {
 			String c = fc.get(i).get(0);
@@ -191,7 +181,7 @@ public class Maximal {
 		return true;
 	}
 
-	private void step3(Node node) {
+	private void step3(Node node) { // step3,4,5 included
 
 		ArrayList<String> common = sharedV.get(node.keysN.get(0));
 
@@ -215,12 +205,9 @@ public class Maximal {
 			}
 			keys.remove(0);
 			Node tempN = new Node(cn, svn, keys);
-			step4(tempN);
+			step4(tempN); // step 4
 
-			if (!step5(tempN)) {
-
-				// System.out.println( "svn"+tempN.svN); //printing partitions
-				// System.out.println( "cn"+tempN.cN); //printing partitions
+			if (!step5(tempN)) { // step 5
 				tree.push(tempN);
 			} else {
 				break;
@@ -229,7 +216,9 @@ public class Maximal {
 		}
 	}
 
-	public static HashMap<String, ArrayList<String>> copy(HashMap<String, ArrayList<String>> original) {
+	public static HashMap<String, ArrayList<String>> copy(HashMap<String, ArrayList<String>> original) { // make a copy
+																											// of a
+																											// HashMap
 		HashMap<String, ArrayList<String>> copy = new HashMap<String, ArrayList<String>>();
 		for (Entry<String, ArrayList<String>> entry : original.entrySet()) {
 			copy.put(entry.getKey(), new ArrayList<String>(entry.getValue()));
@@ -237,7 +226,7 @@ public class Maximal {
 		return copy;
 	}
 
-	public static ArrayList<String> copy(ArrayList<String> original) {
+	public static ArrayList<String> copy(ArrayList<String> original) { // make a copy of an ArrayList
 		ArrayList<String> copy = new ArrayList<String>();
 		for (int i = 0; i < original.size(); i++) {
 			copy.add(original.get(i));
@@ -245,7 +234,7 @@ public class Maximal {
 		return copy;
 	}
 
-	private void step4(Node node) {
+	private void step4(Node node) { // checking step 4 conditions
 		HashMap<String, ArrayList<String>> svn = node.svN;
 		HashMap<String, ArrayList<String>> cn = node.cN;
 		ArrayList<String> keys = node.keysN;
@@ -270,7 +259,7 @@ public class Maximal {
 		HashMap<String, ArrayList<String>> cn = copy(node.cN);
 		Object[] cnkeys = cn.keySet().toArray();
 
-		// checking for forbidden config
+		// checking for forbidden configurations
 
 		for (int i = 0; i < cn.keySet().size(); i++) {
 			for (int j = 0; j < fc.size(); j++) {
@@ -281,6 +270,7 @@ public class Maximal {
 		}
 
 		// checking for unions
+
 		for (int i = 0; i < cn.keySet().size(); i++) {
 			for (int j = i + 1; j < cn.keySet().size(); j++) {
 				Set<String> set = new HashSet<String>();
@@ -305,7 +295,10 @@ public class Maximal {
 		return false;
 	}
 
-	private String checksubset(HashMap<String, ArrayList<String>> cn) {
+	private String checksubset(HashMap<String, ArrayList<String>> cn) { // checks if a given arrayList is a subset in
+																		// given hash map
+																		// if there is subset, it returns corresponding
+																		// key of the arraylist in the hashmap
 		Object[] cnkeys = cn.keySet().toArray();
 		for (int i = 0; i < cnkeys.length; i++) {
 			for (int j = cnkeys.length - 1; j > i; j--) {
@@ -322,8 +315,8 @@ public class Maximal {
 		return null;
 	}
 
-	// for stage 3 & drawing
-	public ArrayList<Edge> generateEdges(Map<String,ArrayList<String>> temp) {
+	public ArrayList<Edge> generateEdges(Map<String, ArrayList<String>> temp) { // generating ArrayList of all edges for
+																				// stage 3 & drawing
 
 		Object[] ckeys = temp.keySet().toArray();
 		ArrayList<Edge> result = new ArrayList<Edge>();
@@ -341,7 +334,7 @@ public class Maximal {
 		return result;
 	}
 
-	public void removeDuplicates(ArrayList<Edge> edges) {
+	public void removeDuplicates(ArrayList<Edge> edges) { // remove duplicate edges generated by 'generateEdges' method
 		for (int i = 0; i < edges.size(); i++) {
 			for (int j = i + 1; j < edges.size(); j++) {
 				String v11 = edges.get(i).vertex1;

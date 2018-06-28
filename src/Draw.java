@@ -11,14 +11,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Draw {
-
+	
+	static ArrayList<Edge> mainEdges = new ArrayList<Edge>();
 	static int currentPar = 0;
 	static int windowSize = 700;
-	static Interaction frame = new Interaction("Maximal Clique Partioning", windowSize);
+	static Interaction frame = new Interaction("Maximal Clique Partioning", windowSize, mainEdges );
 	JPanel bottom = new JPanel(new BorderLayout());
 	JButton next = new JButton("Next");
 	JButton back = new JButton("Previous");
-	ArrayList<Edge> mainEdges;
 	static ArrayList<ArrayList<Edge>> parEdges = new ArrayList<ArrayList<Edge>>();
 	static ArrayList<Map<String, ArrayList<String>>> partitions = new ArrayList<Map<String, ArrayList<String>>>();
 
@@ -75,6 +75,8 @@ public class Draw {
 		if (currentPar > 0) {
 			currentPar--;
 		}
+		frame.clearFrame();
+		frame.repaint();
 		draw(partitions.get(currentPar), parEdges.get(currentPar));
 
 	}

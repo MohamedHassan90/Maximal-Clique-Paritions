@@ -11,10 +11,7 @@ public class Main {
 
 	@SuppressWarnings("serial")
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 		String input = "";
-
 		FileReader fr = null;
 		try {
 			fr = new FileReader("input.txt");
@@ -35,22 +32,20 @@ public class Main {
 		for (int i = 0; i < m.partitions.size(); i++) {
 			parEdges.add(m.generateEdges(m.partitions.get(i)));
 		}
-		 //Interaction frame = new Interaction("Maximal Graphs",700);
+		// Interaction frame = new Interaction("Maximal Graphs",700);
 
-		 Draw d = new Draw(mainEdges, parEdges, m.partitions);
+		Draw d = new Draw(mainEdges, parEdges, m.partitions);
 
-//		 Interaction.draw( m.partitions.get(2), parEdges);
+		// Interaction.draw( m.partitions.get(2), parEdges);
 
-		Edge e1 = new Edge("4", "6");
-		Stage3 s1 = new Stage3(mainEdges, e1);
-		Edge e2 = new Edge("4", "5");
-		Stage3 s2 = new Stage3(mainEdges, e2);
-		Edge e3 = new Edge("6", "7");
-		Stage3 s3 = new Stage3(mainEdges, e3);
-		 Edge e4 = new Edge("5","7");
-		 Stage3 s4 = new Stage3(mainEdges, e4);
+		/*
+		 * Edge e1 = new Edge("4", "6"); Stage3 s1 = new Stage3(mainEdges, e1); Edge e2
+		 * = new Edge("4", "5"); Stage3 s2 = new Stage3(mainEdges, e2); Edge e3 = new
+		 * Edge("6", "7"); Stage3 s3 = new Stage3(mainEdges, e3); Edge e4 = new
+		 * Edge("5","7"); Stage3 s4 = new Stage3(mainEdges, e4);
+		 */
 		// disabled nodes should not do modifications !!! needs to be fixed
-		 //Fixed? ^
+		// Fixed? ^
 
 		// s.printEdges();
 		// s.chooseEdge(s.edges.get(0));

@@ -16,9 +16,10 @@ public class Interaction extends JFrame implements MouseListener, ActionListener
 	ArrayList<Vertex> vertices;
 	ArrayList<edge> edges;
 	Graphics2D g2;
+	ArrayList<Edge> mainEdges = new ArrayList<Edge>();
 	
 
-	public Interaction(String name, int ws) { // Constructor
+	public Interaction(String name, int ws, ArrayList<Edge> me) { // Constructor
 		addMouseListener(this);
 		this.setTitle(name);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,6 +32,7 @@ public class Interaction extends JFrame implements MouseListener, ActionListener
 		this.setVisible(true);
 		//Makes sure everything is in the window
 		this.pack();
+		this.mainEdges = me;
 	}
 
 	class Vertex {
